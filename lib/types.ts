@@ -22,7 +22,10 @@ export type DiagramKey =
   | "tunnel"
   | "tunnel-vs-port-forward"
   | "arsitektur-lengkap"
-  | "docker";
+  | "docker"
+  | "registrar-cloudflare-server"
+  | "dns-record-types"
+  | "vercel-cloudflare-flow";
 
 export type Block =
   | { t: "h"; text: string }
