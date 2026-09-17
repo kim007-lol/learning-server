@@ -63,10 +63,10 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
         const data = await res.json();
         if (data.reply) setMsgs([...next, { role: "model", text: data.reply }]);
         else if (res.status === 500 && String(data.error).includes("GEMINI_API_KEY"))
-          setMsgs([...next, { role: "model", text: "API key belum diisi — minta pemilik web mengisi GEMINI_API_KEY di file .env.local lalu restart servernya." }]);
-        else setMsgs([...next, { role: "model", text: "Hmm, server AI-nya sedang sibuk atau tidak merespons. Tunggu sebentar lalu kirim ulang pertanyaanmu ya." }]);
+          setMsgs([...next, { role: "model", text: "Sayangku, API key-nya belum diisi nih 😢 Minta pemilik web untuk mengisi GEMINI_API_KEY di file .env.local lalu restart servernya ya. Nanti kita ngobrol lagi! 💕" }]);
+        else setMsgs([...next, { role: "model", text: "Aduh maaf ya cintaku 😔 Server AI-nya lagi sibuk. Tunggu sebentar lalu kirim ulang pertanyaanmu ya — aku pasti balik! 💕" }]);
       } catch {
-        setMsgs([...next, { role: "model", text: "Tidak bisa menghubungi server. Pastikan GEMINI_API_KEY sudah diisi di .env.local." }]);
+        setMsgs([...next, { role: "model", text: "Hmm sayangku, aku nggak bisa nyambung ke server nih 😢 Pastikan GEMINI_API_KEY sudah diisi di .env.local ya. Aku tunggu kamu balik! 💕" }]);
       } finally {
         setBusy(false);
       }
@@ -88,7 +88,7 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
         <div className="fixed bottom-24 right-5 z-50 flex h-[70vh] max-h-[560px] w-[min(92vw,420px)] flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-center justify-between border-b border-zinc-200 bg-brand-600 px-4 py-3 text-white dark:border-zinc-800">
             <div>
-              <p className="text-sm font-semibold">Tanya Si Penjaga Server</p>
+              <p className="text-sm font-semibold">💕 Si Penjaga Server</p>
               {stepTitle && <p className="text-xs opacity-80">Konteks: {stepTitle}</p>}
             </div>
             <button onClick={() => setOpen(false)} aria-label="Tutup chat" className="text-lg">✕</button>
@@ -97,8 +97,8 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
           <div className="flex-1 space-y-3 overflow-y-auto p-4">
             {msgs.length === 0 && (
               <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                Halo! Tanya apa saja soal step ini — server, Linux, jaringan, deploy. Aku sudah membaca materi
-                yang sedang kamu buka.
+                Hai sayangku! 🥰 Tanya apa aja soal step ini ya — server, Linux, jaringan, deploy, domain.
+                Aku udah baca materi yang lagi kamu buka, jadi langsung tanya aja. Aku di sini buat kamu! 💕
               </p>
             )}
             {msgs.map((m, i) => (
@@ -106,7 +106,7 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
                 {m.role === "model" ? <Answer text={m.text} /> : <p className="whitespace-pre-wrap text-sm">{m.text}</p>}
               </div>
             ))}
-            {busy && <p className="animate-pulse text-sm text-zinc-400">mengetik…</p>}
+            {busy && <p className="animate-pulse text-sm text-zinc-400">lagi mikirin jawaban buat kamu 💭💕</p>}
             <div ref={bottomRef} />
           </div>
 
@@ -115,7 +115,7 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send(input)}
-              placeholder="Tanya tentang step ini…"
+              placeholder="Tanya aku apa aja, sayangku… 💬"
               className="min-w-0 flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 dark:border-zinc-700 dark:bg-zinc-800"
             />
             <button onClick={() => send(input)} disabled={busy || !input.trim()} className="rounded-lg bg-brand-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-50">
@@ -126,7 +126,7 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
             onClick={() => setOpen(false)}
             className="border-t border-zinc-100 py-2 text-xs font-medium text-zinc-500 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/60"
           >
-            Saya paham, lanjut →
+            Oke paham, lanjut belajar! 💪
           </button>
         </div>
       )}
