@@ -2,7 +2,13 @@ import { NextResponse } from "next/server";
 import { getStep, stepToPlainText } from "@/data";
 import { BASE_SYSTEM_PROMPT } from "@/lib/chat-prompt";
 
-const MODELS = [process.env.GEMINI_MODEL ?? "gemini-flash-latest", "gemini-3.6-flash", "gemini-flash-lite-latest"];
+const MODELS = [
+  process.env.GEMINI_MODEL,
+  "gemini-3.6-flash",
+  "gemini-3.5-flash",
+  "gemini-flash-latest",
+  "gemini-flash-lite-latest",
+].filter(Boolean) as string[];
 
 export async function POST(req: Request) {
   const key = process.env.GEMINI_API_KEY;
