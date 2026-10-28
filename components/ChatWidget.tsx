@@ -63,10 +63,10 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
         const data = await res.json();
         if (data.reply) setMsgs([...next, { role: "model", text: data.reply }]);
         else if (res.status === 500 && String(data.error).includes("GEMINI_API_KEY"))
-          setMsgs([...next, { role: "model", text: "Sayangku, API key-nya belum diisi nih 😢 Minta pemilik web untuk mengisi GEMINI_API_KEY di file .env.local lalu restart servernya ya. Nanti kita ngobrol lagi! 💕" }]);
-        else setMsgs([...next, { role: "model", text: "Aduh maaf ya cintaku 😔 Server AI-nya lagi sibuk. Tunggu sebentar lalu kirim ulang pertanyaanmu ya — aku pasti balik! 💕" }]);
+          setMsgs([...next, { role: "model", text: "GEMINI_API_KEY belum terkonfigurasi di file .env.local. Silakan isi API key terlebih dahulu lalu restart server Next.js agar asisten DevOps aktif." }]);
+        else setMsgs([...next, { role: "model", text: "Koneksi ke AI server sedang sibuk atau mengalami timeout. Silakan tunggu beberapa detik lalu coba kirimkan kembali pertanyaanmu." }]);
       } catch {
-        setMsgs([...next, { role: "model", text: "Hmm sayangku, aku nggak bisa nyambung ke server nih 😢 Pastikan GEMINI_API_KEY sudah diisi di .env.local ya. Aku tunggu kamu balik! 💕" }]);
+        setMsgs([...next, { role: "model", text: "Gagal terhubung ke endpoint server AI. Pastikan GEMINI_API_KEY sudah valid di .env.local dan koneksi internet aktif." }]);
       } finally {
         setBusy(false);
       }
@@ -78,7 +78,7 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
     <>
       <button
         onClick={() => setOpen((o) => !o)}
-        aria-label="Tanya asisten Server Journey"
+        aria-label="Tanya asisten DevOps Server Journey"
         className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-brand-600 text-2xl text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
       >
         {open ? "×" : "💬"}
@@ -88,7 +88,7 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
         <div className="fixed bottom-24 right-5 z-50 flex h-[70vh] max-h-[560px] w-[min(92vw,420px)] flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-center justify-between border-b border-zinc-200 bg-brand-600 px-4 py-3 text-white dark:border-zinc-800">
             <div>
-              <p className="text-sm font-semibold">💕 Si Penjaga Server</p>
+              <p className="text-sm font-semibold">🛠️ Mentor DevOps</p>
               {stepTitle && <p className="text-xs opacity-80">Konteks: {stepTitle}</p>}
             </div>
             <button onClick={() => setOpen(false)} aria-label="Tutup chat" className="text-lg">✕</button>
@@ -96,9 +96,8 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
 
           <div className="flex-1 space-y-3 overflow-y-auto p-4">
             {msgs.length === 0 && (
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                Hai sayangku! 🥰 Tanya apa aja soal step ini ya — server, Linux, jaringan, deploy, domain.
-                Aku udah baca materi yang lagi kamu buka, jadi langsung tanya aja. Aku di sini buat kamu! 💕
+              <p className="text-sm text-zinc-600 dark:text-zinc-300">
+                Halo! Saya mentor DevOps kamu di Server Journey. Tanyakan apa saja seputar Linux, jaringan (LAN/Tailscale), SSH, firewall, Nginx, deploy, hingga CI/CD. Saya sudah memegang konteks materi yang sedang kamu buka — langsung tanyakan kendala atau hal yang membingungkanmu!
               </p>
             )}
             {msgs.map((m, i) => (
@@ -106,7 +105,7 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
                 {m.role === "model" ? <Answer text={m.text} /> : <p className="whitespace-pre-wrap text-sm">{m.text}</p>}
               </div>
             ))}
-            {busy && <p className="animate-pulse text-sm text-zinc-400">lagi mikirin jawaban buat kamu 💭💕</p>}
+            {busy && <p className="animate-pulse text-sm text-zinc-400">menganalisis kendala sistem... ⚙️</p>}
             <div ref={bottomRef} />
           </div>
 
@@ -115,7 +114,7 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send(input)}
-              placeholder="Tanya aku apa aja, sayangku… 💬"
+              placeholder="Tanyakan masalah teknis, command, SSH, Tailscale... 💬"
               className="min-w-0 flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 dark:border-zinc-700 dark:bg-zinc-800"
             />
             <button onClick={() => send(input)} disabled={busy || !input.trim()} className="rounded-lg bg-brand-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-50">
@@ -126,7 +125,7 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
             onClick={() => setOpen(false)}
             className="border-t border-zinc-100 py-2 text-xs font-medium text-zinc-500 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/60"
           >
-            Oke paham, lanjut belajar! 💪
+            Siap, lanjut eksplorasi! 🚀
           </button>
         </div>
       )}

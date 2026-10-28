@@ -12,6 +12,7 @@ export type DiagramKey =
   | "bridged"
   | "host-only-nat"
   | "ssh-flow"
+  | "tailscale-mesh"
   | "firewall"
   | "ssh-key"
   | "proses-mati"

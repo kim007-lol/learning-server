@@ -145,7 +145,7 @@ export const part7: Part = {
         {
           t: "callout",
           kind: "warn",
-          text: "Satu-satunya syok budaya: VPS langsung diserang bot sejak menit pertama (IP publik!). Firewall + SSH key + disable password login dari Bagian 4 berubah dari 'edukatif' jadi 'wajib hukumnya'.",
+          text: "Satu-satunya syok budaya: VPS langsung diserang bot sejak menit pertama (IP publik!). Firewall + SSH key + disable password login dari Bagian 4 berubah dari 'edukatif' jadi 'wajib hukumnya'. Best practice DevOps modern: pasang Tailscale di VPS, lalu tutup port 22 di firewall publik — kamu hanya SSH via IP 100.x Tailscale sehingga bot internet tidak bisa menyentuh port SSH-mu sama sekali.",
         },
       ],
       references: [

@@ -101,6 +101,19 @@ function diagram(key: string): { nodes: Node[]; edges: Edge[]; h?: number } | nu
         edges: [{ from: "h", to: "v", label: "login + command" }, { from: "v", to: "h", label: "hasil" }],
         h: 220,
       };
+    case "tailscale-mesh":
+      return {
+        nodes: [
+          n("host", 25, 60, "Laptop Host\n(100.x.y.1 / Cafe/Rumah)", "zinc", 175, 60),
+          n("tailnet", 235, 50, "Tailscale Mesh VPN\n(WireGuard P2P Enkripsi)", "accent", 175, 75),
+          n("vm", 445, 60, "VM Server\n(100.x.y.2 / Di mana saja)", "brand", 165, 60),
+        ],
+        edges: [
+          { from: "host", to: "tailnet", label: "ssh user@100.x" },
+          { from: "tailnet", to: "vm", label: "tembus NAT & firewall" },
+        ],
+        h: 190,
+      };
     case "firewall":
       return {
         nodes: [n("in", 30, 60, "Internet / jaringan", "zinc", 140), n("fw", 250, 40, "UFW\npenjaga gerbang", "accent", 130, 80), n("ok", 460, 15, "Port 22 (SSH)\nPort 80/443", "brand", 150, 52), n("no", 460, 110, "Port lain → dibuang", "zinc", 150, 44)],

@@ -28,11 +28,16 @@ export const part4: Part = {
           text: "PENTING: izinkan SSH SEBELUM enable. Kalau kamu enable firewall dalam keadaan deny-all dari sesi SSH, sesi berikutnya (dan mungkin kamu) terkunci keluar. Kebiasaan: rule dulu, baru gerbang.",
         },
         { t: "cmd", text: "sudo ufw allow ssh", note: "buka port 22 (layanan bernama 'ssh' sudah terdaftar di /etc/services)" },
+        {
+          t: "callout",
+          kind: "tip",
+          text: "Praktik Keamanan DevOps: Jika kamu memakai Tailscale dari Bagian 3, kamu bahkan bisa membatasi SSH hanya untuk interface Tailscale privat: `sudo ufw allow in on tailscale0 to any port 22`. Dengan cara ini, port SSH tidak terbuka ke orang lain di WiFi lokal!",
+        },
         { t: "cmd", text: "sudo ufw enable", note: "nyalakan — konfirmasi 'Proceed with yes?' ketik y" },
         { t: "cmd", text: "sudo ufw status verbose", note: "lihat aturan aktif" },
         {
           t: "p",
-          text: "Setelah enable, tutup sesi SSH-mu (`exit`) lalu **koneksi ulang dari PowerShell** — kalau masih bisa masuk, konfigurasi firewall-mu sehat. Uji juga sisi deny: dari host, `Test-NetConnection 192.168.1.xx -Port 80` → seharusnya `TcpTestSucceeded : False` (belum ada yang listen pun, firewall menolak lebih dulu).",
+          text: "Setelah enable, tutup sesi SSH-mu (`exit`) lalu **koneksi ulang dari PowerShell** — kalau masih bisa masuk, konfigurasi firewall-mu sehat. Uji juga sisi deny: dari host, `Test-NetConnection 192.168.1.xx -Port 80` (atau IP 100.x Tailscale) → seharusnya `TcpTestSucceeded : False` (belum ada yang listen pun, firewall menolak lebih dulu).",
         },
         {
           t: "p",
@@ -72,12 +77,12 @@ export const part4: Part = {
           text: "Hasil: `~/.ssh/id_ed25519` (private — JANGAN dibagikan, pernah pun) dan `id_ed25519.pub` (public — aman dipasang di server mana pun).",
         },
         { t: "h", text: "Langkah 2 — Salin public key ke VM" },
-        { t: "cmd", text: "type $env:USERPROFILE\\.ssh\\id_ed25519.pub | ssh username@192.168.1.xx \"mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys\"", note: "cara PowerShell (ssh-copy-id tidak ada di Windows bawaan)" },
+        { t: "cmd", text: "type $env:USERPROFILE\\.ssh\\id_ed25519.pub | ssh username@192.168.1.xx \"mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys\"", note: "PowerShell: salin public key (ganti IP dengan IP LAN atau 100.x Tailscale)" },
         {
           t: "p",
           text: "Di Linux/macOS cukup `ssh-copy-id username@ip-vm`. Hasilnya sama: public key-mu ditambahkan ke `~/.ssh/authorized_keys` di VM — 'daftar tamu VIP' yang kalau cocok membuat sshd membuka pintu tanpa password.",
         },
-        { t: "cmd", text: "ssh username@192.168.1.xx", note: "tes: harus masuk TANPA minta password VM (mungkin minta passphrase kunci jika kamu set)" },
+        { t: "cmd", text: "ssh username@192.168.1.xx", note: "tes: harus masuk TANPA minta password VM (bisa pakai IP LAN atau IP Tailscale)" },
         { t: "h", text: "Langkah 3 — (Opsional, paham risikonya dulu) Matikan login password" },
         {
           t: "callout",

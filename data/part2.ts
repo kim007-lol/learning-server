@@ -53,7 +53,7 @@ export const part2: Part = {
         {
           t: "callout",
           kind: "tip",
-          text: "Rekomendasi: **Bridged** dulu (paling mudah dipahami & dipraktikkan). Kalau laptopmu sering pindah WiFi atau jaringan kampus memblokir, baru pindah ke dual **Host-only + NAT**. Step berikutnya mempraktikkan Bridged; catatan Host-only disertakan di troubleshooting.",
+          text: "Rekomendasi: **Bridged** dulu (paling mudah dipahami & dipraktikkan). Kalau laptopmu sering pindah WiFi atau jaringan kampus memblokir, opsi lainnya adalah dual **Host-only + NAT**, atau solusi modern DevOps yang akan kita pelajari di Bagian 3: **Tailscale Mesh VPN** yang tembus semua pembatasan jaringan lokal tanpa pusing soal subnet WiFi.",
         },
       ],
       checklist: [
@@ -108,7 +108,7 @@ export const part2: Part = {
         {
           q: "ip a tidak menampilkan IP sama sekali (atau hanya 169.254.x.x)",
           a: [
-            { t: "p", text: "DHCP tidak menjawab. Cek: (1) salah pilih Name adapter? harus adapter yang benar-benar online. (2) Jaringan kampus/kantor sering blokir — solusinya mode **Host-only + NAT**: Settings → Adapter 1 = Host-only (Name: VirtualBox Host-Only Ethernet Adapter), Adapter 2 = NAT; di guest jalankan `sudo dhclient enp0s8` untuk interface host-only. (3) Cabut-pasang: `sudo ip link set enp0s3 down && sudo ip link set enp0s3 up`." },
+            { t: "p", text: "DHCP tidak menjawab. Cek: (1) salah pilih Name adapter? harus adapter yang benar-benar online. (2) Jaringan kampus/kantor sering blokir — solusinya mode **Host-only + NAT**: Settings → Adapter 1 = Host-only (Name: VirtualBox Host-Only Ethernet Adapter), Adapter 2 = NAT; di guest jalankan `sudo dhclient enp0s8` untuk interface host-only. (3) Alternatif modern: cukup pakai mode NAT biasa + pasang **Tailscale** di VM dan laptop (dibahas di Bagian 3). (4) Cabut-pasang: `sudo ip link set enp0s3 down && sudo ip link set enp0s3 up`." },
           ],
         },
         {
@@ -117,7 +117,7 @@ export const part2: Part = {
         },
         {
           q: "IP VM berubah tiap hari, SSH jadi sering gagal",
-          a: [{ t: "p", text: "Normal — DHCP memberi IP 'sewa'. Solusi paling benar: di router, kunci IP berdasarkan MAC VM (menu DHCP binding; cek MAC di `ip a` baris link/ether). Cara sederhana yang sah untuk belajar: biasakan cek `ip a` dulu sebelum SSH, atau pakai mode Host-only (IP-nya jarang berubah)." }],
+          a: [{ t: "p", text: "Normal — DHCP router memberi IP 'sewa'. Solusi klasik: di router, kunci IP berdasarkan MAC VM (menu DHCP binding). Solusi modern DevOps: pasang **Tailscale** di Bagian 3 — kamu mendapat IP 100.x statis dan MagicDNS yang tidak pernah berubah walau kamu sering ganti WiFi atau tethering HP!" }],
         },
       ],
     },
