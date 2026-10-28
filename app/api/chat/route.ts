@@ -46,7 +46,10 @@ export async function POST(req: Request) {
       if (res.status !== 503 && res.status !== 500) break;
       await new Promise((r) => setTimeout(r, 1500));
     }
-    // 404 = model tidak tersedia untuk key ini → lanjut ke model cadangan
+    // 402 = kredit habis, 403 = permission, 429 = rate limit
+    if (lastErr.startsWith("402")) {
+      return NextResponse.json({ error: "Kredit saldo Gemini API habis (Prepayment credits depleted). Silakan periksa billing di Google AI Studio atau gunakan API key baru." }, { status: 402 });
+    }
     if (lastErr.startsWith("403") || lastErr.startsWith("429")) break;
   }
   return NextResponse.json({ error: lastErr }, { status: 502 });

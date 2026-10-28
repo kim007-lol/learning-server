@@ -61,10 +61,15 @@ export default function ChatWidget({ stepSlug, stepTitle }: { stepSlug?: string;
           body: JSON.stringify({ slug: stepSlug, messages: next }),
         });
         const data = await res.json();
-        if (data.reply) setMsgs([...next, { role: "model", text: data.reply }]);
-        else if (res.status === 500 && String(data.error).includes("GEMINI_API_KEY"))
+        if (data.reply) {
+          setMsgs([...next, { role: "model", text: data.reply }]);
+        } else if (res.status === 402 || String(data.error).includes("402") || String(data.error).toLowerCase().includes("depleted") || String(data.error).toLowerCase().includes("credit")) {
+          setMsgs([...next, { role: "model", text: "Saldo kredit Gemini API pada akun Google ini telah habis (HTTP 402: Prepayment credits depleted). Silakan isi billing di Google AI Studio (ai.studio/projects) atau gunakan API key baru di .env.local." }]);
+        } else if (res.status === 500 && String(data.error).includes("GEMINI_API_KEY")) {
           setMsgs([...next, { role: "model", text: "GEMINI_API_KEY belum terkonfigurasi di file .env.local. Silakan isi API key terlebih dahulu lalu restart server Next.js agar asisten DevOps aktif." }]);
-        else setMsgs([...next, { role: "model", text: "Koneksi ke AI server sedang sibuk atau mengalami timeout. Silakan tunggu beberapa detik lalu coba kirimkan kembali pertanyaanmu." }]);
+        } else {
+          setMsgs([...next, { role: "model", text: `Gagal memproses pesan (${data.error || "Server AI sedang sibuk"}). Coba beberapa saat lagi.` }]);
+        }
       } catch {
         setMsgs([...next, { role: "model", text: "Gagal terhubung ke endpoint server AI. Pastikan GEMINI_API_KEY sudah valid di .env.local dan koneksi internet aktif." }]);
       } finally {
