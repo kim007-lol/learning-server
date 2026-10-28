@@ -24,7 +24,9 @@ export async function POST(req: Request) {
   if (!messages.length) return NextResponse.json({ error: "tidak ada pesan" }, { status: 400 });
 
   const step = body.slug ? getStep(body.slug) : undefined;
-  const context = step ? `\n\nSTEP SAAT INI (judul: ${step.title}):\n${stepToPlainText(step).slice(0, 12000)}` : "";
+  const context = step
+    ? `\n\n[REFERENSI INTERNAL MATERI: Pengguna sedang berada di halaman "${step.title}". Jadikan isi di bawah sebagai referensi teknis menjawab jika relevan. PENTING: JANGAN PERNAH menyapa dengan kalimat kaku seperti "Saat ini kita sedang berada di Langkah..." atau mengutip ulang judul materi di awal kalimat. Langsung jawab ke inti pertanyaan.]\n${stepToPlainText(step).slice(0, 12000)}`
+    : "";
 
   const payload = {
     systemInstruction: { parts: [{ text: BASE_SYSTEM_PROMPT + context }] },
